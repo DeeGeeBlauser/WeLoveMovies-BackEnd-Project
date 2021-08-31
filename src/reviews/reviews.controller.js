@@ -34,6 +34,7 @@ async function reviewExists(req, res, next) {
 }
 
 ////////CRUD////////
+
 async function read(req, res, next) {
   const { review: data } = res.locals;
   res.json({ data });
@@ -56,7 +57,14 @@ async function destroy(req, res, next) {
   res.sendStatus(204);
 }
 
+async function list(req, res) {
+  const { movieId } = req.params;
+  const data = await reviewsService.list(movieId);
+  res.json({ data });
+}
+
 module.exports = {
+  list: [asyncErrorBoundary(list)],
   read: [asyncErrorBoundary(reviewExists), read],
   update: [
     asyncErrorBoundary(reviewExists),
